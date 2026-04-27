@@ -57,7 +57,7 @@ export const checkFlightsAndSendWhatsApp = async () => {
 
   const flightsToTrack = [
     { code: '6E941', person: 'Sudhanshu', rules: { '28-4': testNumbers, '29-4': sudhanshuParents } },
-    { code: '6E6477', person: 'Priyansh', rules: { '3-5': priyanshParents } }
+    { code: '6E6477', person: 'Priyansh', rules: { '28-4': testNumbers, '3-5': priyanshParents } }
   ];
 
   let summary = [];
