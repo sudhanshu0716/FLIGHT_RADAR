@@ -103,11 +103,44 @@ function App() {
   const [flightData, setFlightData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [statusSudhanshu, setStatusSudhanshu] = useState('Checking status...');
+  const [statusPriyansh, setStatusPriyansh] = useState('Checking status...');
   const intervalRef = useRef(null);
 
   // Default center: India
   const defaultCenter = [22.5937, 78.9629];
   const defaultZoom = 5;
+
+  // Background check for flight status on page load
+  useEffect(() => {
+    const checkFlightStatus = async (code, setStatus) => {
+      try {
+        const response = await fetch(`/api/zones/fcgi/feed.js?flight=${code}`);
+        if (!response.ok) return;
+        const data = await response.json();
+        const flightKeys = Object.keys(data).filter(k => k !== 'full_count' && k !== 'version');
+        
+        if (flightKeys.length > 0) {
+          setStatus('🟢 LIVE NOW');
+        } else {
+          setStatus('🔴 NOT STARTED YET');
+        }
+      } catch (err) {
+        setStatus('Status Unknown');
+      }
+    };
+
+    checkFlightStatus('6E941', setStatusSudhanshu);
+    checkFlightStatus('6E6477', setStatusPriyansh);
+    
+    // Check every 2 minutes in the background
+    const interval = setInterval(() => {
+      checkFlightStatus('6E941', setStatusSudhanshu);
+      checkFlightStatus('6E6477', setStatusPriyansh);
+    }, 120000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const fetchFlightData = useCallback(async (code, personName) => {
     if (!code) return;
@@ -260,6 +293,7 @@ function App() {
             >
               <span>Sudhanshu</span>
               <span className="flight-number">IndiGo 6E941</span>
+              <span style={{ display: 'block', fontSize: '0.8rem', marginTop: '4px', fontWeight: 'bold', color: statusSudhanshu.includes('LIVE') ? '#10b981' : '#ef4444' }}>{statusSudhanshu}</span>
             </button>
             
             <button 
@@ -268,6 +302,7 @@ function App() {
             >
               <span>Priyansh</span>
               <span className="flight-number">IndiGo 6E6477</span>
+              <span style={{ display: 'block', fontSize: '0.8rem', marginTop: '4px', fontWeight: 'bold', color: statusPriyansh.includes('LIVE') ? '#10b981' : '#ef4444' }}>{statusPriyansh}</span>
             </button>
           </div>
 
@@ -344,10 +379,16 @@ function App() {
             zoom={zoom} 
             style={{ height: '100%', width: '100%' }}
             zoomControl={false}
+            maxBounds={[
+              [6.0, 68.0],
+              [36.0, 97.0]
+            ]}
+            maxBoundsViscosity={1.0}
+            minZoom={5}
+            attributionControl={false}
           >
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             />
             
             <MapUpdater center={center} zoom={zoom} />

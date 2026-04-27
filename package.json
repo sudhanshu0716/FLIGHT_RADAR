@@ -12,13 +12,15 @@
   },
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "http-proxy-middleware": "^3.0.5",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.11.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-leaflet": "^5.0.0"
+    "react-leaflet": "^5.0.0",
+    "twilio": "^6.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -1,8 +1,10 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { checkFlightsAndSendWhatsApp } from './whatsappTracker.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +13,21 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
+
+// Run the WhatsApp tracker check every 5 minutes automatically while the server is alive
+setInterval(() => {
+  checkFlightsAndSendWhatsApp().catch(console.error);
+}, 5 * 60 * 1000);
+
+// Endpoint for GitHub Actions cron to ping and trigger the check
+app.get('/cron/whatsapp-check', async (req, res) => {
+  try {
+    const result = await checkFlightsAndSendWhatsApp();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // Proxy for the lightweight telemetry feed
 app.use('/api', createProxyMiddleware({
