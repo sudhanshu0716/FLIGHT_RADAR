@@ -233,6 +233,7 @@ body {
 .plane-icon-wrapper {
   background: none;
   border: none;
+  transition: transform 3s ease-in-out !important;
 }
 
 .leaflet-popup-content-wrapper {

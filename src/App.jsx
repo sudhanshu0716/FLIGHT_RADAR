@@ -199,14 +199,13 @@ function App() {
   const createPlaneIcon = (heading) => {
     return L.divIcon({
       className: 'plane-icon-wrapper',
-      html: `<div style="transform: rotate(${heading}deg); width: 36px; height: 36px; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2563eb" width="36" height="36">
+      html: `<div style="transform: rotate(${heading}deg); width: 28px; height: 28px; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2563eb" width="28" height="28">
                  <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
                </svg>
              </div>`,
-      iconSize: [36, 36],
-      iconAnchor: [18, 18],
-      popupAnchor: [0, -18]
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
     });
   };
 
@@ -355,16 +354,12 @@ function App() {
 
             {/* Draw Origin Airport */}
             {originAirport && (
-              <Marker position={[originAirport.lat, originAirport.lon]} icon={originIcon}>
-                <Popup><strong>Origin:</strong> {originAirport.name}</Popup>
-              </Marker>
+              <Marker position={[originAirport.lat, originAirport.lon]} icon={originIcon} interactive={false} />
             )}
 
             {/* Draw Destination Airport */}
             {destAirport && (
-              <Marker position={[destAirport.lat, destAirport.lon]} icon={destIcon}>
-                <Popup><strong>Destination:</strong> {destAirport.name}</Popup>
-              </Marker>
+              <Marker position={[destAirport.lat, destAirport.lon]} icon={destIcon} interactive={false} />
             )}
 
             {/* Draw Route Line */}
@@ -383,12 +378,8 @@ function App() {
                 position={[flightData.latitude, flightData.longitude]}
                 icon={createPlaneIcon(flightData.trueTrack)}
                 zIndexOffset={1000}
-              >
-                <Popup>
-                  <strong>{activePerson}'s Flight</strong><br/>
-                  Speed: {flightData.velocity} km/h
-                </Popup>
-              </Marker>
+                interactive={false}
+              />
             )}
           </MapContainer>
         </section>
