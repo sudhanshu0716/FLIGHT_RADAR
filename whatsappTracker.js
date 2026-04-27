@@ -96,7 +96,7 @@ export const checkFlightsAndSendWhatsApp = async () => {
       // 1. Alert: Flight has taken off
       const startedKey = `${flight.code}_Started_${dateStr}`;
       if (!sentAlerts.has(startedKey) && alt > 1000) {
-        const msg = `✈️ *Takeoff Alert for ${flight.person}*\n\nThe flight (IndiGo ${flight.code}) has officially taken off from the origin airport and is in the air! Track it live on the app.`;
+        const msg = `✈️ *Flight Update for ${flight.person}*\n\nGood news! The flight (${flight.code}) has taken off and is now in the air.`;
         for (const number of targetNumbers) {
           try {
             await client.messages.create({ body: msg, from: fromNumber, to: number });
@@ -114,7 +114,7 @@ export const checkFlightsAndSendWhatsApp = async () => {
         const cityKey = `${flight.code}_Near_${city.name}_${dateStr}`;
         
         if (distance < 100 && !sentAlerts.has(cityKey) && sentAlerts.has(startedKey)) {
-          const msg = `📍 *En Route Update for ${flight.person}*\n\nThe flight is currently crossing near *${city.name}*.\nAltitude: ${alt} m\nSpeed: ${speed} km/h.`;
+          const msg = `📍 *Location Update for ${flight.person}*\n\nThe flight is currently crossing near ${city.name}. It is flying smoothly at an altitude of ${alt} meters and a speed of ${speed} km/h!`;
           for (const number of targetNumbers) {
             try {
               await client.messages.create({ body: msg, from: fromNumber, to: number });
@@ -130,7 +130,7 @@ export const checkFlightsAndSendWhatsApp = async () => {
       // 3. Alert: Final Approach (Landing soon)
       const approachKey = `${flight.code}_Approach_${dateStr}`;
       if (sentAlerts.has(startedKey) && !sentAlerts.has(approachKey) && alt > 0 && alt < 1500 && speed > 200) {
-        const msg = `🛬 *Landing Alert for ${flight.person}*\n\nThe flight is on its final approach and will be landing very soon!`;
+        const msg = `🛬 *Landing Soon for ${flight.person}*\n\nThe flight is very close to the destination and is about to land!`;
         for (const number of targetNumbers) {
           try {
             await client.messages.create({ body: msg, from: fromNumber, to: number });
@@ -145,7 +145,7 @@ export const checkFlightsAndSendWhatsApp = async () => {
       // 4. Alert: Landed Successfully
       const landedKey = `${flight.code}_Landed_${dateStr}`;
       if (sentAlerts.has(startedKey) && !sentAlerts.has(landedKey) && alt < 100 && speed < 100) {
-        const msg = `✅ *Arrival Confirmation for ${flight.person}*\n\nThe flight has landed successfully at the destination!`;
+        const msg = `✅ *Safe Arrival for ${flight.person}*\n\nThe flight has landed safely at the airport!`;
         for (const number of targetNumbers) {
           try {
             await client.messages.create({ body: msg, from: fromNumber, to: number });
