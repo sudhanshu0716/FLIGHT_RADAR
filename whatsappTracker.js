@@ -51,9 +51,16 @@ export const checkFlightsAndSendWhatsApp = async () => {
   const sudhanshuParents = [process.env.TWILIO_SUDHANSHU_PARENT_1, process.env.TWILIO_SUDHANSHU_PARENT_2].filter(Boolean);
   const priyanshParents = [process.env.TWILIO_PRIYANSH_PARENT_1, process.env.TWILIO_PRIYANSH_PARENT_2].filter(Boolean);
 
-  // Get current date to apply user's date rules
-  const today = new Date();
-  const dateStr = `${today.getDate()}-${today.getMonth() + 1}`; // e.g., "28-4" or "29-4"
+  // Get current date to apply user's date rules (Forced to India Standard Time)
+  const options = { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'numeric' };
+  const formatter = new Intl.DateTimeFormat('en-IN', options);
+  const formattedDate = formatter.format(new Date()); // Returns "28/4" or "28/04" depending on node version
+  
+  // Clean it up to exactly match our "28-4" format
+  const parts = formattedDate.split('/');
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const dateStr = `${day}-${month}`; // e.g., "28-4" or "29-4"
 
   const flightSudhanshu = process.env.VITE_FLIGHT_SUDHANSHU || '6E941';
   const flightPriyansh = process.env.VITE_FLIGHT_PRIYANSH || '6E6477';
