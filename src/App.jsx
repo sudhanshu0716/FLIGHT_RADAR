@@ -111,6 +111,9 @@ function App() {
   const defaultCenter = [22.5937, 78.9629];
   const defaultZoom = 5;
 
+  const flightSudhanshu = import.meta.env.VITE_FLIGHT_SUDHANSHU || '6E941';
+  const flightPriyansh = import.meta.env.VITE_FLIGHT_PRIYANSH || '6E6477';
+
   // Background check for flight status on page load
   useEffect(() => {
     const checkFlightStatus = async (code, setStatus) => {
@@ -130,13 +133,13 @@ function App() {
       }
     };
 
-    checkFlightStatus('6E941', setStatusSudhanshu);
-    checkFlightStatus('6E6477', setStatusPriyansh);
+    checkFlightStatus(flightSudhanshu, setStatusSudhanshu);
+    checkFlightStatus(flightPriyansh, setStatusPriyansh);
     
     // Check every 2 minutes in the background
     const interval = setInterval(() => {
-      checkFlightStatus('6E941', setStatusSudhanshu);
-      checkFlightStatus('6E6477', setStatusPriyansh);
+      checkFlightStatus(flightSudhanshu, setStatusSudhanshu);
+      checkFlightStatus(flightPriyansh, setStatusPriyansh);
     }, 120000);
     
     return () => clearInterval(interval);
@@ -289,19 +292,19 @@ function App() {
           <div className="button-group">
             <button 
               className={`btn-person ${activePerson === 'Sudhanshu' ? 'active' : ''}`}
-              onClick={() => fetchFlightData('6E941', 'Sudhanshu')}
+              onClick={() => fetchFlightData(flightSudhanshu, 'Sudhanshu')}
             >
               <span>Sudhanshu</span>
-              <span className="flight-number">IndiGo 6E941</span>
+              <span className="flight-number">IndiGo {flightSudhanshu}</span>
               <span style={{ display: 'block', fontSize: '0.8rem', marginTop: '4px', fontWeight: 'bold', color: statusSudhanshu.includes('LIVE') ? '#10b981' : '#ef4444' }}>{statusSudhanshu}</span>
             </button>
             
             <button 
               className={`btn-person ${activePerson === 'Priyansh' ? 'active' : ''}`}
-              onClick={() => fetchFlightData('6E6477', 'Priyansh')}
+              onClick={() => fetchFlightData(flightPriyansh, 'Priyansh')}
             >
               <span>Priyansh</span>
-              <span className="flight-number">IndiGo 6E6477</span>
+              <span className="flight-number">IndiGo {flightPriyansh}</span>
               <span style={{ display: 'block', fontSize: '0.8rem', marginTop: '4px', fontWeight: 'bold', color: statusPriyansh.includes('LIVE') ? '#10b981' : '#ef4444' }}>{statusPriyansh}</span>
             </button>
           </div>

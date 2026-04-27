@@ -55,12 +55,16 @@ export const checkFlightsAndSendWhatsApp = async () => {
   const today = new Date();
   const dateStr = `${today.getDate()}-${today.getMonth() + 1}`; // e.g., "28-4" or "29-4"
 
+  const flightSudhanshu = process.env.VITE_FLIGHT_SUDHANSHU || '6E941';
+  const flightPriyansh = process.env.VITE_FLIGHT_PRIYANSH || '6E6477';
+
   const flightsToTrack = [
-    { code: '6E941', person: 'Sudhanshu', rules: { '28-4': testNumbers, '29-4': sudhanshuParents } },
-    { code: '6E6477', person: 'Priyansh', rules: { '28-4': testNumbers, '3-5': priyanshParents } }
+    { code: flightSudhanshu, person: 'Sudhanshu', rules: { '28-4': testNumbers, '29-4': sudhanshuParents } },
+    { code: flightPriyansh, person: 'Priyansh', rules: { '28-4': testNumbers, '3-5': priyanshParents } }
   ];
 
   let summary = [];
+  console.log(`\n[${new Date().toLocaleTimeString()}] ⏳ Cron ping received. Checking flights...`);
 
   for (const flight of flightsToTrack) {
     const targetNumbers = flight.rules[dateStr];
@@ -158,9 +162,15 @@ export const checkFlightsAndSendWhatsApp = async () => {
       }
 
     } catch (err) {
-      console.error(`Error tracking ${flight.code}:`, err);
+      console.error(`Error tracking ${flight.code}:`, err.message);
     }
   }
+
+  console.log(`\n✅ Check completed. Alerts sent this cycle: ${summary.length}`);
+  if (summary.length > 0) {
+    console.log(summary);
+  }
+  console.log('----------------------------------------');
 
   return { success: true, alertsSent: summary };
 };
