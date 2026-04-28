@@ -125,7 +125,7 @@ export const checkFlightsAndSendWhatsApp = async () => {
         const cityKey = `${flight.code}_Near_${city.name}_${dateStr}`;
         
         if (distance < 100 && !sentAlerts.has(cityKey) && sentAlerts.has(startedKey)) {
-          const msg = `📍 *Location Update for ${flight.person}*\n\nThe flight is currently crossing near ${city.name}. It is flying smoothly at an altitude of ${alt} meters and a speed of ${speed} km/h!`;
+          const msg = `📍 *Location Update for ${flight.person}*\n\nThe flight is currently crossing near ${city.name}. It is flying smoothly at an altitude of ${alt} feets and a speed of ${speed} km/h!`;
           for (const number of targetNumbers) {
             try {
               await client.messages.create({ body: msg, from: fromNumber, to: number });
