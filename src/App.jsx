@@ -211,6 +211,11 @@ function App() {
     } catch (err) {
       setError(err.message === 'Failed to fetch' ? 'Network Error: Make sure the server is running.' : err.message);
       setFlightData(null);
+      
+      // Auto-hide the error message after 4 seconds so it doesn't block the screen permanently
+      setTimeout(() => {
+        setError(null);
+      }, 4000);
     } finally {
       setIsLoading(false);
     }
