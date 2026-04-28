@@ -15,9 +15,7 @@ const cities = [
   { name: 'Nagpur', lat: 21.1458, lon: 79.0882 },
   { name: 'Bhopal', lat: 23.2599, lon: 77.4126 },
   { name: 'Bengaluru', lat: 12.9716, lon: 77.5946 },
-  { name: 'Delhi', lat: 28.6139, lon: 77.2090 },
-  { name: 'Mumbai', lat: 19.0760, lon: 72.8777 },
-  { name: 'Chennai', lat: 13.0827, lon: 80.2707 },
+  { name: 'Agra', lat: 27.1767, lon: 78.0081 },
   { name: 'Gwalior', lat: 26.2183, lon: 78.1828 }
 ];
 
